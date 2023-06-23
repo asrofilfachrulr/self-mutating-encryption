@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="main-container" class="container-fluid">
+      <div class="row">
+        <div id="main-left" class="col-12 col-md">
+          <div class="container">
+            <div class="row">
+              <p class="title">Decrypted Text</p>
+              <textarea class="form-control" id="#ta-decrypted" style="height: 80%"></textarea>            
+            </div>
+            <p class="title mt-2">Keys</p>
+            <div class="row">
+              <textarea class="form-control" id="#ta-keys" style="height: 80%"></textarea>
+            </div>
+          </div>
+        </div>
+        <div id="main-right" class="col-12 col-md">
+          <div class="container">
+            <p class="title">Encrypted Text</p>
+            <div class="row">
+              <textarea class="form-control" id="#ta-encrypted" style="height: 80%"></textarea>
+            </div>
+            <div class="row d-flex " style="gap: 1em">
+              <button type="button" class="btn btn-primary col-lg-3 col-md p-3 p-md-2">encrypt</button> <button type="button" class="btn btn-success col-lg-3 col-md p-3 p-md-2">decrypt</button>
+            </div>            
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
