@@ -53,3 +53,8 @@ body {
   font-weight: 500;
   font-size: 2rem;
 }
+
+.selected {
+  font-weight: 500;
+  text-decoration: underline;
+}

@@ -72,9 +72,18 @@ const textAreaEncrypted = document.getElementById("ta-encrypted");
 const textAreaKey = document.getElementById("ta-key");
 const listKeysDiv = document.getElementById("list-keys");
 
-const vignereKeys = [];
+const encryptBtn = document.getElementById("encrypt-btn");
+const decryptBtn = document.getElementById("decrypt-btn");
+const resetBtn = document.getElementById("reset-btn");
 
-document.getElementById("encrypt-btn").addEventListener("click", function () {
+const challangeBox = document.getElementById("challenge-bx");
+
+let plainText = "";
+
+const vignereKeys = [];
+let selectedKeyIndex = -1;
+
+encryptBtn.addEventListener("click", function () {
   emptyVignereKeys();
   const text = textAreaDecrypted.value;
   const key = textAreaKey.value;
@@ -95,7 +104,7 @@ document.getElementById("encrypt-btn").addEventListener("click", function () {
   <ul>
 `;
 
-  innerTag += "<li>" + key + "</li>";
+  vignereKeys.push(key);
 
   vignereKeys.push(
     vigenereCipher(key, ms[0] + ms[1] + ms[2] + ms[0] + ms[1] + ms[0])
@@ -145,18 +154,24 @@ document.getElementById("encrypt-btn").addEventListener("click", function () {
     )
   );
 
-  vignereKeys.forEach((k) => (innerTag += "<li>" + k + "</li>"));
+  vignereKeys.forEach(
+    (k, i) => (innerTag += '<li id="key-' + i.toString() + '">' + k + "</li>")
+  );
 
   innerTag += "</ul>";
 
+  selectedKeyIndex = 0;
+
   listKeysDiv.innerHTML = innerTag;
+
+  document.getElementById("key-0").classList.add("selected");
 
   console.log("Text: ", text);
   console.log("Key: ", key);
   console.log("Enc: ", encrypted);
 });
 
-document.getElementById("decrypt-btn").addEventListener("click", function () {
+decryptBtn.addEventListener("click", function () {
   const text = textAreaEncrypted.value;
   const key = textAreaKey.value;
 
@@ -165,14 +180,42 @@ document.getElementById("decrypt-btn").addEventListener("click", function () {
     return;
   }
 
+  if (challangeBox.checked) {
+    if (key !== vignereKeys[selectedKeyIndex]) {
+      const newSelectedIndex = Math.floor(Math.random() * vignereKeys.length);
+
+      const newEncry = vigenereCipher(plainText, vignereKeys[newSelectedIndex]);
+      textAreaEncrypted.value = newEncry;
+
+      document
+        .getElementById("key-" + selectedKeyIndex.toString())
+        .classList.remove("selected");
+      document
+        .getElementById("key-" + newSelectedIndex.toString())
+        .classList.add("selected");
+      selectedKeyIndex = newSelectedIndex;
+
+      window.alert("Key salah, key telah diubah");
+
+      return;
+    } else {
+      challangeBox.checked = false;
+      encryptBtn.removeAttribute("disabled");
+      resetBtn.removeAttribute("disabled");
+      textAreaEncrypted.removeAttribute("disabled");
+      textAreaDecrypted.removeAttribute("disabled");
+      textAreaDecrypted.value = "";
+    }
+  }
+
   const decrypted = vigenereDecrypt(text, key);
   textAreaDecrypted.value = decrypted;
   console.log("Text: ", text);
-  console.log("Key: ", Key);
+  console.log("Key: ", key);
   console.log("Dec: ", decrypted);
 });
 
-document.getElementById("reset-btn").addEventListener("click", function () {
+resetBtn.addEventListener("click", function () {
   textAreaEncrypted.value = "";
   textAreaDecrypted.value = "";
   textAreaKey.value = "";
@@ -184,3 +227,20 @@ document.getElementById("reset-btn").addEventListener("click", function () {
 function emptyVignereKeys() {
   while (vignereKeys.length > 0) vignereKeys.pop();
 }
+
+challangeBox.addEventListener("change", function () {
+  if (this.checked) {
+    plainText = textAreaDecrypted.value;
+    encryptBtn.setAttribute("disabled", "disabled");
+    resetBtn.setAttribute("disabled", "disabled");
+    textAreaEncrypted.setAttribute("disabled", "disabled");
+    textAreaDecrypted.setAttribute("disabled", "disabled");
+    textAreaDecrypted.value = "xxxxx";
+  } else {
+    encryptBtn.removeAttribute("disabled");
+    resetBtn.removeAttribute("disabled");
+    textAreaEncrypted.removeAttribute("disabled");
+    textAreaDecrypted.removeAttribute("disabled");
+    textAreaDecrypted.value = plainText;
+  }
+});
