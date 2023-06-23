@@ -1,7 +1,6 @@
 "use strict";
 const charList =
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-!@#$%^&*()+=<>,.?/:;{}[]\\|~` ";
-
 function vigenereCipher(text, key) {
   let ciphertext = "";
   let keyLength = key.length;
@@ -68,10 +67,17 @@ function vigenereDecrypt(ciphertext, key) {
 }
 
 // DOM
+const textAreaDecrypted = document.getElementById("ta-decrypted");
+const textAreaEncrypted = document.getElementById("ta-encrypted");
+const textAreaKey = document.getElementById("ta-key");
+const listKeysDiv = document.getElementById("list-keys");
+
+const vignereKeys = [];
 
 document.getElementById("encrypt-btn").addEventListener("click", function () {
-  const text = document.getElementById("ta-decrypted").value;
-  const key = document.getElementById("ta-key").value;
+  emptyVignereKeys();
+  const text = textAreaDecrypted.value;
+  const key = textAreaKey.value;
 
   if (!text || !key) {
     window.alert("Key atau Decrypted Text tidak valid!");
@@ -79,15 +85,80 @@ document.getElementById("encrypt-btn").addEventListener("click", function () {
   }
 
   const encrypted = vigenereCipher(text, key);
-  document.getElementById("ta-encrypted").value = encrypted;
+  textAreaEncrypted.value = encrypted;
+
+  const ms = new Date().getMilliseconds().toString();
+  console.log("ms: ", ms);
+
+  let innerTag = `
+  <p>Keys</p>
+  <ul>
+`;
+
+  innerTag += "<li>" + key + "</li>";
+
+  vignereKeys.push(
+    vigenereCipher(key, ms[0] + ms[1] + ms[2] + ms[0] + ms[1] + ms[0])
+  );
+
+  vignereKeys.push(
+    vigenereCipher(key, ms[2] + ms[2] + ms[1] + ms[2] + ms[2] + ms[2])
+  );
+
+  vignereKeys.push(
+    vigenereCipher(key, ms[1] + ms[0] + ms[1] + ms[2] + ms[0] + ms[1])
+  );
+
+  vignereKeys.push(
+    vigenereCipher(
+      key,
+      (parseInt(ms[0]) + parseInt(ms[1])).toString() +
+        (parseInt(ms[2]) + parseInt(ms[0])).toString() +
+        (parseInt(ms[1]) + parseInt(ms[0])).toString() +
+        (parseInt(ms[0]) + parseInt(ms[1])).toString() +
+        (parseInt(ms[2]) + parseInt(ms[0])).toString() +
+        (parseInt(ms[1]) + parseInt(ms[0])).toString()
+    )
+  );
+
+  vignereKeys.push(
+    vigenereCipher(
+      key,
+      (parseInt(ms[0]) + parseInt(ms[0])).toString() +
+        (parseInt(ms[2]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[0]) + parseInt(ms[0])).toString() +
+        (parseInt(ms[1]) + parseInt(ms[0])).toString() +
+        (parseInt(ms[0]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[1]) + parseInt(ms[0])).toString()
+    )
+  );
+
+  vignereKeys.push(
+    vigenereCipher(
+      key,
+      (parseInt(ms[2]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[2]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[1]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[0]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[2]) + parseInt(ms[2])).toString() +
+        (parseInt(ms[1]) + parseInt(ms[2])).toString()
+    )
+  );
+
+  vignereKeys.forEach((k) => (innerTag += "<li>" + k + "</li>"));
+
+  innerTag += "</ul>";
+
+  listKeysDiv.innerHTML = innerTag;
+
   console.log("Text: ", text);
-  console.log("Key: ", Key);
+  console.log("Key: ", key);
   console.log("Enc: ", encrypted);
 });
 
 document.getElementById("decrypt-btn").addEventListener("click", function () {
-  const text = document.getElementById("ta-encrypted").value;
-  const key = document.getElementById("ta-key").value;
+  const text = textAreaEncrypted.value;
+  const key = textAreaKey.value;
 
   if (!text || !key) {
     window.alert("Key atau Encrypted Text tidak valid!");
@@ -95,8 +166,21 @@ document.getElementById("decrypt-btn").addEventListener("click", function () {
   }
 
   const decrypted = vigenereDecrypt(text, key);
-  document.getElementById("ta-decrypted").value = decrypted;
+  textAreaDecrypted.value = decrypted;
   console.log("Text: ", text);
   console.log("Key: ", Key);
   console.log("Dec: ", decrypted);
 });
+
+document.getElementById("reset-btn").addEventListener("click", function () {
+  textAreaEncrypted.value = "";
+  textAreaDecrypted.value = "";
+  textAreaKey.value = "";
+  listKeysDiv.innerHTML = "";
+
+  emptyVignereKeys();
+});
+
+function emptyVignereKeys() {
+  while (vignereKeys.length > 0) vignereKeys.pop();
+}
