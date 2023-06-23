@@ -15,11 +15,11 @@
           <div class="container">
             <div class="row">
               <p class="title">Decrypted Text</p>
-              <textarea class="form-control" id="#ta-decrypted" style="height: 80%"></textarea>            
+              <textarea class="form-control" id="ta-decrypted" style="height: 80%"></textarea>            
             </div>
-            <p class="title mt-2">Keys</p>
+            <p class="title mt-2">Key</p>
             <div class="row">
-              <textarea class="form-control" id="#ta-keys" style="height: 80%"></textarea>
+              <textarea class="form-control" id="ta-key" style="height: 80%"></textarea>
             </div>
           </div>
         </div>
@@ -27,15 +27,16 @@
           <div class="container">
             <p class="title">Encrypted Text</p>
             <div class="row">
-              <textarea class="form-control" id="#ta-encrypted" style="height: 80%"></textarea>
+              <textarea class="form-control" id="ta-encrypted" style="height: 80%"></textarea>
             </div>
             <div class="row d-flex " style="gap: 1em">
-              <button type="button" class="btn btn-primary col-lg-3 col-md p-3 p-md-2">encrypt</button> <button type="button" class="btn btn-success col-lg-3 col-md p-3 p-md-2">decrypt</button>
+              <button type="button" id="encrypt-btn" class="btn btn-primary col-lg-3 col-md p-3 p-md-2">encrypt</button> <button type="button" id="decrypt-btn" class="btn btn-success col-lg-3 col-md p-3 p-md-2">decrypt</button>
             </div>            
           </div>
         </div>
         </div>
       </div>
     </div>
+    <script src="app.js"></script>
   </body>
 </html>

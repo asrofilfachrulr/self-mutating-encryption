@@ -2,7 +2,6 @@
 const charList =
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-!@#$%^&*()+=<>,.?/:;{}[]\\|~` ";
 
-console.log("charList length: ", charList.length);
 function vigenereCipher(text, key) {
   let ciphertext = "";
   let keyLength = key.length;
@@ -24,8 +23,6 @@ function vigenereCipher(text, key) {
       cipherIndex = (cipherIndex + prevIndex) % charList.length;
 
     prevIndex = cipherIndex;
-
-    console.log(cipherIndex);
 
     // Add the encrypted character to the ciphertext.
     ciphertext += charList.charAt(cipherIndex);
@@ -57,8 +54,6 @@ function vigenereDecrypt(ciphertext, key) {
         (plaintextIndex - charList.indexOf(ciphertext.charAt(i - 1))) %
         charList.length;
 
-    console.log(charList.indexOf(ciphertext.charAt(i - 1)));
-
     plaintextIndex =
       plaintextIndex < 0 ? charList.length + plaintextIndex : plaintextIndex;
 
@@ -72,12 +67,36 @@ function vigenereDecrypt(ciphertext, key) {
   return plaintext.split("").reverse().join("");
 }
 
-const text = "Hello, World!";
-const key = "az!kjos$";
-let ciphertext = vigenereCipher(text, key);
-console.log("\n");
-let plaintext = vigenereDecrypt(ciphertext, key);
+// DOM
 
-console.log("Text: ", text);
-console.log("Cipher: ", ciphertext);
-console.log("Plain: ", plaintext);
+document.getElementById("encrypt-btn").addEventListener("click", function () {
+  const text = document.getElementById("ta-decrypted").value;
+  const key = document.getElementById("ta-key").value;
+
+  if (!text || !key) {
+    window.alert("Key atau Decrypted Text tidak valid!");
+    return;
+  }
+
+  const encrypted = vigenereCipher(text, key);
+  document.getElementById("ta-encrypted").value = encrypted;
+  console.log("Text: ", text);
+  console.log("Key: ", Key);
+  console.log("Enc: ", encrypted);
+});
+
+document.getElementById("decrypt-btn").addEventListener("click", function () {
+  const text = document.getElementById("ta-encrypted").value;
+  const key = document.getElementById("ta-key").value;
+
+  if (!text || !key) {
+    window.alert("Key atau Encrypted Text tidak valid!");
+    return;
+  }
+
+  const decrypted = vigenereDecrypt(text, key);
+  document.getElementById("ta-decrypted").value = decrypted;
+  console.log("Text: ", text);
+  console.log("Key: ", Key);
+  console.log("Dec: ", decrypted);
+});
